@@ -1,5 +1,5 @@
 // shutter轉場
-function shutter() {
+function shutter(end) {
     const table = document.querySelector('#tableShutter');
     let td = '';
     let tr = '';
@@ -55,7 +55,71 @@ function shutter() {
             count = 0;
             clearTimeout(colorChange2);
             stop(colorChange2);
-            startSceenThree();
+            end();
+            return;
+        }
+    };
+
+    colorChange1();
+};
+function shutter2(end) {
+    const table = document.querySelector('#tableShutter');
+    let td = '';
+    let tr = '';
+    // let resulttr = '';
+    let boxCount = 0;
+    const rowNum = 4; //有幾行
+    const boxNum = 5; //一行有幾個box
+
+    for (let ii = 0; ii < rowNum; ii++) {
+        td = '';
+        for (let i = 0; i < boxNum; i++) {
+            td += `<td class="colorbox${boxCount}"></td>`;
+            boxCount++;
+        };
+        tr += `<tr>${td}</tr>`;
+    };
+    table.innerHTML = tr;
+    console.log(boxCount);
+
+    const htmlTd = [...document.querySelectorAll('td')];
+    const domTd = htmlTd.slice();
+    // console.log(domTd, domTd.constructor.name, tdTotal);
+    let count = 0;
+
+
+    const colorChange1 = () => {
+        if (count < boxCount) {
+            $(domTd[count]).css('background-color', `rgba(0, ${Math.floor(count / boxNum) * Math.floor(boxCount / rowNum)}, 0`);
+            count++;
+
+            setTimeout(colorChange1, 100);
+        }
+        else {
+            count = 0;
+            clearTimeout(colorChange1);
+            stop(colorChange1);
+            setTimeout(colorChange2, 1000);
+        }
+    };
+
+    const colorChange2 = () => {
+        // $(sceenThree).css('display', 'none');
+        // document.querySelector('#bgi').append(mainChar);
+        document.querySelector('#bosscharAll').style = 'display: none;';
+        document.querySelector('#princesscharAll').style = 'display: block;';
+        $('#princesscharAll .conver_box').css('display', 'none');
+        if (count < boxCount) {
+            $(domTd[count]).css('background-color', `transparent`);
+            count++;
+
+            setTimeout(colorChange2, 100);
+        }
+        else {
+            count = 0;
+            clearTimeout(colorChange2);
+            stop(colorChange2);
+            end();
             return;
         }
     };
@@ -271,7 +335,9 @@ function startSceenTwo() {
                             $(conversationDragon).css('display', 'block');
                             $(conversationDragon).find('#sloganTenone').css('display', 'block');
                             setTimeout(() => {
-                                setTimeout(shutter, 2000);
+                                setTimeout(function () {
+                                    shutter(startSceenThree);
+                                }, 2000);
                                 sceenThree.append(mainChar);
                                 $(sceenThree).css('animation-name', 'intofight');
                                 $(sceenThree).one('animationend', function () {
@@ -307,6 +373,8 @@ let dragonHeight;
 let dragonWidth;
 let elifHeight;
 let elifWidth;
+let princessOffsetLeft;
+let princessOffsetTop;
 
 
 //戰鬥前說明
@@ -358,51 +426,120 @@ function startFight() {
     const fireball = document.querySelector('#fireball');
     let qustNum = 1;
     let bossQone;
+    let bossQtwo;
+    let bossQthree;
+    let bossQfour;
+    let bossQend;
     let elifAone;
+    let elifAtwo;
+    let elifAthree;
+    let elifAfour;
     let elifBone;
+    let elifBtwo;
+    let elifBthree;
+    let elifBfour;
     let elifCone;
+    let elifCtwo;
+    let elifCthree;
+    let elifCfour;
     let bosstalkOne;
-    let bosstalkP;
+    let bosstalkTwo;
+    let bosstalkThree;
+    let bosstalkFour;
+    // let bosstalkP;
 
-    function questionOne() {
+    // 定義問題和答案和擊倒的對話
+    const qOne = '問題一：xxxxx?';
+    const qTwo = '問題二：xxxxx?';
+    const qThree = '問題三：xxxxx?';
+    const qFour = '問題四：xxxxx?';
+    const qEnd = '原來你比我還熱愛看劇啊';
+    const qEnd2 = '好吧,我承認，你真的很厲害...';
+    const qEnd3 = '是我輸了，我會乖乖離開...';
+
+    const aOneOne = 'A. 1xxxxxx';
+    const aTwoOne = 'A. 2xxxxxx';
+    const aThreeOne = 'A. 3xxxxxx';
+    const aFourOne = 'A. 4xxxxxx';
+
+    const aOneTwo = 'B. 1xxxxxx';
+    const aTwoTwo = 'B. 2xxxxxx';
+    const aThreeTwo = 'B. 3xxxxxx';
+    const aFourTwo = 'B. 4xxxxxx';
+
+    const aOneThree = 'C. 1xxxxxx';
+    const aTwoThree = 'C. 2xxxxxx';
+    const aThreeThree = 'C. 3xxxxxx';
+    const aFourThree = 'C. 4xxxxxx';
+
+    const aOneFour = 'D. 1xxxxxx';
+    const aTwoFour = 'D. 2xxxxxx';
+    const aThreeFour = 'D. 3xxxxxx';
+    const aFourFour = 'D. 4xxxxxx';
+
+    const bTalkOne = '還不錯嘛，那這招呢？';
+    const bTalkTwo = '沒想到你這麼厲害，看招！';
+    const bTalkThree = '怎麼可能...';
+    const bTalkFour = '嗚啊啊啊啊，沒想到你竟然打敗我了！';
+
+    function questionOne(q, bossqs) {
+        console.log(qustNum, 'qustion');
         $(bossBox).css('opacity', '1');
-        bossQone = document.createTextNode('問題一：xxxxx?');
-        bossQ.append(bossQone);
+        bossqs = document.createTextNode(`${q}`);
+        bossQ.append(bossqs);
         bossBox.append(bossQ);
-        setTimeout(answerOne, 1000);
+        if (qustNum === 1) {
+            setTimeout(function () { answerOne(aOneOne, aOneTwo, aOneThree, elifAone, elifBone, elifCone, bossqs); }, 1000);
+        };
+        if (qustNum === 2) {
+            setTimeout(function () { answerOne(aTwoOne, aTwoTwo, aTwoThree, elifAtwo, elifBtwo, elifCtwo, bossqs); }, 1000);
+        };
+        if (qustNum === 3) {
+            setTimeout(function () { answerOne(aThreeOne, aThreeTwo, aThreeThree, elifAthree, elifBthree, elifCthree, bossqs); }, 1000);
+        };
+        if (qustNum === 4) {
+            setTimeout(function () { answerOne(aFourOne, aFourTwo, aFourThree, elifAfour, elifBfour, elifCfour, bossqs); }, 1000);
+        };
     };
-    function answerOne() {
+    function answerOne(a1, a2, a3, aa, ab, ac, bossqs) {
+        function delayatk() {
+            attack(bossqs, aa, ab, ac);
+            $('.fightbox_elif p').off('click', delayatk);
+        };
+        console.log(qustNum, 'answer');
         $(elifBox).css('opacity', '1');
-        elifAone = document.createTextNode('A. xxxxxx');
-        elifA.append(elifAone);
-        elifBone = document.createTextNode('B. xxxxxx');
-        elifB.append(elifBone);
-        elifCone = document.createTextNode('C. xxxxxx');
-        elifC.append(elifCone);
+        aa = document.createTextNode(`${a1}`);
+        elifA.append(aa);
+        ab = document.createTextNode(`${a2}`);
+        elifB.append(ab);
+        ac = document.createTextNode(`${a3}`);
+        elifC.append(ac);
 
 
         elifBox.append(elifA);
         elifBox.append(elifB);
         elifBox.append(elifC);
-        $('.fightbox_elif p').one('click', attack);
+        if (qustNum >= 1 && qustNum < 5) {
+            $('.fightbox_elif p').one('click', delayatk);
+        };
     };
-    function attack() {
-        console.log('attack!!!');
-        $('.fightbox_elif p').off('click', attack);
+    function attack(bq, aa, ab, ac) {
+        console.log(qustNum, 'attack');
+        console.log('attack!!!', bq, aa, ab, ac, typeof bq, typeof aa);
         $(elifBox).css('transition', '.5s').css('opacity', '0').one('transitionend', function () {
-            document.querySelector('.fightbox_elif p').remove();
+            // document.querySelector('.fightbox_elif p').remove();
             $(showTenfour).css('display', 'block');
-            bossQone.remove();
-            elifAone.remove();
-            elifBone.remove();
-            elifCone.remove();
+            aa.parentNode.removeChild(aa);
+            ab.parentNode.removeChild(ab);
+            ac.parentNode.removeChild(ac);
             setTimeout(shotFireball, 500);
         });
         $(bossBox).css('transition', '.3s').css('opacity', '0').one('transitionend', function () {
-            document.querySelector('.fightbox_boss p').remove();
+            bq.parentNode.removeChild(bq);
         });
     };
     function shotFireball() {
+        console.log(qustNum, 'shotfireball');
         $(showTenfour).css('display', 'none');
         dragonOffsetLeft = $('#bosscharAll > img').offset().left;
         dragonOffsetTop = $('#bosscharAll > img').offset().top;
@@ -421,8 +558,18 @@ function startFight() {
             console.log('shotfire3');
             $(`#heart img:nth-child(${qustNum})`).css('opacity', '0');
             $('#bosscharAll').css('animation-name', 'unset');
-            qustNum++;
-            bosstalk();
+            if (qustNum === 4) {
+                bosstalk(bTalkFour, bosstalkFour);
+            };
+            if (qustNum === 3) {
+                bosstalk(bTalkThree, bosstalkThree);
+            };
+            if (qustNum === 2) {
+                bosstalk(bTalkTwo, bosstalkTwo);
+            };
+            if (qustNum === 1) {
+                bosstalk(bTalkOne, bosstalkOne);
+            };
         });
         $('#mainChar').one('animationend', function () {
             console.log('shotfire4');
@@ -440,22 +587,143 @@ function startFight() {
             console.log('shotfire1');
         }, 50);
     };
-    function bosstalk() {
-        bosstalkOne = document.createTextNode('不錯嘛，那這招呢？');
+    function bosstalk(bst, bq) {
+        qustNum++;
+        console.log(qustNum, 'bosstalk');
+        bq = document.createTextNode(`${bst}`);
         bosstalkP = document.createElement('p');
-        bosstalkP.append(bosstalkOne);
+        bosstalkP.append(bq);
         document.querySelector('#bosscharAll .conver_sation').append(bosstalkP);
         // $('#bosscharAll .conver_sation').css('display', 'flex');
         $('#bosscharAll .conver_box').css('display', 'flex');
         setTimeout(function () {
             $('#bosscharAll .conver_box').css('display', 'none');
             $('#bosscharAll .conver_box p').remove();
-            bosstalkOne.remove();
-            bosstalkP.remove();
+            bq.parentNode.removeChild(bq);
+            // bosstalkP.remove();
         }, 1800);
-        setTimeout(questionOne, 2000);
+        if (qustNum === 2) {
+            setTimeout(function () { questionOne(qTwo, bossQtwo); }, 2000);
+        }
+        if (qustNum === 3) {
+            setTimeout(function () { questionOne(qThree, bossQthree); }, 2000);
+        }
+        if (qustNum === 4) {
+            setTimeout(function () { questionOne(qFour, bossQfour); }, 2000);
+        }
+        if (qustNum === 5) {
+            setTimeout(function () { dragonend(qEnd, bossQend); }, 2000);
+        }
     };
-    questionOne();
+    function dragonend(bst, bq) {
+        qustNum++;
+        console.log(qustNum, 'bosstalkend');
+        bq = document.createTextNode(`${bst}`);
+        bosstalkP = document.createElement('p');
+        bosstalkP.append(bq);
+        document.querySelector('#bosscharAll .conver_sation').append(bosstalkP);
+        // $('#bosscharAll .conver_sation').css('display', 'flex');
+        $('#bosscharAll .conver_box').css('display', 'flex');
+        setTimeout(function () {
+            $('#bosscharAll .conver_box').css('display', 'none');
+            $('#bosscharAll .conver_box p').remove();
+            bq.parentNode.removeChild(bq);
+        }, 1800);
+        if (qustNum === 6) {
+            setTimeout(function () {
+                dragonend(qEnd2, bossQend);
+            }, 2000);
+        } else if (qustNum === 7) {
+            setTimeout(function () {
+                dragonend(qEnd3, bossQend);
+            }, 2000);
+        } else if (qustNum === 8) {
+            $('#bosscharAll').on('animationend', function () {
+                $('#bosscharAll').css('display', 'none');
+                // princessthankyou();
+            });
+            setTimeout(function () {
+                console.log(qustNum);
+                $('#bosscharAll').css(
+                    {
+                        "animation-duration": "4s",
+                        "animation-fill-mode": "forwards",
+                        "animation-name": "dragonend",
+                    }
+                );
+                setTimeout(function () {
+                    shutter2(princessthankyou);
+                }, 3000);
+            }, 2000);
+        }
+    };
+    questionOne(qOne, bossQone);
+};
+
+// 公主跑出來感謝你
+function princessthankyou() {
+    $('#sceen_four').css('display', 'none');
+    $('#princesscharAll #sloganHelp').css('display', 'none');
+    const princess = document.querySelector('#princesscharAll');
+    princessOffsetLeft = $('#princesscharAll > img').offset().left;
+    princessOffsetTop = $('#princesscharAll > img').offset().top;
+    elifOffsetLeft = $('#mainChar > img').offset().left;
+    elifOffsetTop = $('#mainChar > img').offset().top;
+    elifWidth = $('#mainChar > img').width();
+    elifHeight = $('#mainChar > img').height();
+    const moverate = (princessOffsetLeft - (elifOffsetLeft + elifWidth)) / 2;
+    $(mainChar).css(
+        {   
+            "transform": `translateX(${moverate}px)`,
+            "transition": "3s",
+            "transition-timing-function": "linear"
+        }
+    );
+    $(princess).css(
+        {   
+            "transform": `translateX(-${moverate}px)`,
+            "transition": "3s",
+            "transition-timing-function": "linear"
+        }
+    );
+    $(princess).one('transitionend', function(){
+        document.querySelector('#princesscharAll #sloganHelp').innerText = '謝謝你救了我！';
+        $('#princesscharAll #sloganHelp').css('display', 'flex');
+        $('#princesscharAll .conver_box').css('display', 'flex');
+        setTimeout(function(){
+            $('#princesscharAll .conver_box').css('display', 'none');
+            $('#mainChar #sloganLast').css('display', 'flex');
+            $('#mainChar .conver_box').css('display', 'flex');
+            setTimeout(function(){
+                const moveout = 100;
+                $('#mainChar .conver_box').css('display', 'none');
+                $('.elif > img').css('transform', 'scaleX(1)');
+                $(mainChar).css(
+                    {   
+                        "transform": `translateX(-100vw)`,
+                        "transition": "3s",
+                        "transition-timing-function": "linear"
+                    }
+                );
+                $(princess).css(
+                    {   
+                        "transform": `translateX(-100vw)`,
+                        "transition": "3s",
+                        "transition-timing-function": "linear"
+                    }
+                );
+                setTimeout(fadeout,2000);
+            },1200);
+        },1200)
+    });
+};
+
+// fadeout
+function fadeout(){
+    $('#bgi').css({
+        'transition': '3s',
+        'opacity': '0'
+    });
 };
 
 
@@ -463,9 +731,8 @@ function startFight() {
 
 
 
-
 // start game -----------------------------------------------------------------------
-// TODO: 修開始戰鬥時的爆版 修愛心zindex！！！
+// TODO: 問題可以用左右兩側飛入，結尾恭喜完成挑戰，狀態欄
 window.addEventListener('load', startSceenOne);
 
 //單獨測試第二幕出場
