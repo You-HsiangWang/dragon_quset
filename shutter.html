@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@700&display=swap");
+
+    :root {
+        font-family: "Red Hat Display", sans-serif;
+        --color-foreground: #0000dd;
+        --color-background: #fdfdfd;
+        --delay: 10;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: var(--color-foreground);
+        line-height: 1.5;
+        height: 100vh;
+    }
+
+    .c-shutter {
+        --fill: forwards;
+        --message: "";
+        font-size: 3rem;
+        color: var(--color-foreground);
+        line-height: 1.5;
+        flex-direction: row;
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 0;
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        list-style: none;
+        user-select: none;
+    }
+
+    .c-shutter__slat {
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        flex-grow: 1;
+        background-color: var(--color-foreground);
+        animation-name: var(--animation);
+        animation-duration: 1s;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: var(--fill);
+        animation-play-state: var(--state);
+        animation-direction: var(--direction);
+    }
+
+    .c-shutter__slat:nth-child(1) {
+        animation-delay: calc(1 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(1):before {
+        margin-left: calc(0 * -10vw);
+    }
+
+    .c-shutter__slat:nth-child(2) {
+        animation-delay: calc(2 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(2):before {
+        margin-left: calc(1 * -10vw);
+    }
+
+    .c-shutter__slat:nth-child(3) {
+        animation-delay: calc(3 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(3):before {
+        margin-left: calc(2 * -10vw);
+    }
+
+    .c-shutter__slat:nth-child(4) {
+        animation-delay: calc(4 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(4):before {
+        margin-left: calc(3 * -10vw);
+    }
+
+    .c-shutter__slat:nth-child(5) {
+        animation-delay: calc(5 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(5):before {
+        margin-left: calc(4 * -10vw);
+    }
+
+    .c-shutter__slat:nth-child(6) {
+        animation-delay: calc(6 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(6):before {
+        margin-left: calc(5 * -10vw);
+    }
+
+    .c-shutter__slat:nth-child(7) {
+        animation-delay: calc(7 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(7):before {
+        margin-left: calc(6 * -10vw);
+    }
+
+    .c-shutter__slat:nth-child(8) {
+        animation-delay: calc(8 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(8):before {
+        margin-left: calc(7 * -10vw);
+    }
+
+    .c-shutter__slat:nth-child(9) {
+        animation-delay: calc(9 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(9):before {
+        margin-left: calc(8 * -10vw);
+    }
+
+    .c-shutter__slat:nth-child(10) {
+        animation-delay: calc(10 / var(--delay) * 1s);
+    }
+
+    .c-shutter__slat:nth-child(10):before {
+        margin-left: calc(9 * -10vw);
+    }
+
+    .c-shutter__slat:before {
+        content: var(--message);
+        color: var(--color-background);
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .c-shutter--opened:not(.c-shutter--closing) {
+        display: none;
+    }
+
+    .c-shutter--opened .c-shutter__slat {
+        height: 0%;
+    }
+
+    .c-shutter--closed {
+        display: flex;
+    }
+
+    .c-shutter--opening {
+        --animation: shutterOpening;
+    }
+
+    .c-shutter--closing {
+        --animation: shutterClosing;
+    }
+
+    @keyframes shutterOpening {
+        0% {
+            height: 100%;
+        }
+
+        100% {
+            height: 0;
+        }
+    }
+
+    @keyframes shutterClosing {
+        0% {
+            height: 0%;
+        }
+
+        100% {
+            height: 100%;
+        }
+    }
+
+    .c-demo {
+        position: fixed;
+        cursor: pointer;
+        font-family: "Red Hat Display", Arial, sans-serif;
+        font-size: 1rem;
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+        bottom: 1rem;
+        left: 50%;
+        transform: translatex(-50%);
+        padding: 1rem 2rem;
+        border-radius: 0.25rem;
+        border: none;
+        transition: opacity 0.5s ease-in-out, outline 0.5s ease-in-out;
+    }
+
+    .c-demo:before {
+        content: "Open";
+    }
+
+    .c-shutter--opened~.c-demo {
+        background-color: var(--color-foreground);
+        color: var(--color-background);
+    }
+
+    .c-shutter--opened~.c-demo:before {
+        content: "Close";
+    }
+
+    .c-shutter--opening~.c-demo,
+    .c-shutter--closing~.c-demo,
+    .c-demo:disabled {
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    .c-shutter--opening~.c-demo:before,
+    .c-shutter--closing~.c-demo:before,
+    .c-demo:disabled:before {
+        content: "Running...";
+    }
+
+    .c-shutter--opening~.c-demo:focus,
+    .c-shutter--closing~.c-demo:focus,
+    .c-demo:disabled:focus {
+        outline: none;
+    }
+</style>
+
+<body>
+    <ul class="c-shutter" style="--message: 'Hello'">
+        <li class="c-shutter__slat"></li>
+        <li class="c-shutter__slat"></li>
+        <li class="c-shutter__slat"></li>
+        <li class="c-shutter__slat"></li>
+        <li class="c-shutter__slat"></li>
+        <li class="c-shutter__slat"></li>
+        <li class="c-shutter__slat"></li>
+        <li class="c-shutter__slat"></li>
+        <li class="c-shutter__slat"></li>
+        <li class="c-shutter__slat"></li>
+    </ul>
+
+    World
+
+    <!-- DEMO CONTROLS -->
+    <button class="c-demo"></button>
+
+
+    <script>
+        let CLASS = {
+            ROOT: 'c-shutter',
+            OPENED: 'c-shutter--opened',
+            OPENING: 'c-shutter--opening',
+            CLOSED: 'c-shutter--closed',
+            CLOSING: 'c-shutter--closing',
+            ITEMS: 'c-shutter__slat'
+        }
+
+        class Shutter {
+            constructor(dom) {
+                this.state = false;
+                this.container = dom;
+            }
+
+            open() {
+                this.state = true;
+                this.toggle(true);
+            }
+            close() {
+                this.state = false;
+                this.toggle(false);
+            }
+
+            toggle(visibility) {
+                this.container.classList.toggle(CLASS.OPENING, visibility);
+                this.container.classList.toggle(CLASS.CLOSING, !visibility);
+
+                setTimeout(() => {
+                    this.container.classList.remove(CLASS.OPENING);
+                    this.container.classList.remove(CLASS.CLOSING);
+                    this.container.classList.toggle(CLASS.OPENED, visibility);
+                    this.container.classList.toggle(CLASS.CLOSED, !visibility);
+                }, 1999)
+            }
+
+            getState() {
+                return this.state;
+            }
+        }
+
+        const $shutter = document.querySelector('.c-shutter');
+
+        let shutter = new Shutter($shutter);
+
+        // Demo controls
+        let demoBtn = document.querySelector('.c-demo');
+
+        demoBtn.addEventListener('click', () => {
+            shutter.getState() ? shutter.close() : shutter.open();
+        })
+
+        // Force demo click
+
+        var click = function (elem) {
+            var evt = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+            elem.dispatchEvent(evt);
+        };
+
+        demoBtn.disabled = true;
+
+        setTimeout(() => {
+            demoBtn.disabled = false;
+            click(demoBtn);
+
+        }, 2000);
+    </script>
+</body>
+
+</html>

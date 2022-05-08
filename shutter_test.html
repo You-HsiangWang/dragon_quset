@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        #tableShutter {
+            width: 100%;
+            height: 100vh;
+            border-collapse: collapse;
+        }
+
+        #tableShutter td {
+            background-color: transparent;
+            transition: 1s;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="tableShutter">
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        const table = document.querySelector('#tableShutter');
+        let td = '';
+        let tr = '';
+        let resulttr = '';
+        let boxCount = 0;
+        const rowNum = 4; //有幾行
+        const boxNum = 5; //一行有幾個box
+
+        for (let ii = 0; ii < rowNum; ii++) {
+            td = '';
+            for (let i = 0; i < boxNum; i++) {
+                td += `<td class="colorbox${boxCount}"></td>`;
+                boxCount++;
+            };
+            tr += `<tr>${td}</tr>`;
+        };
+        table.innerHTML = tr;
+        console.log(boxCount);
+
+        const htmlTd = [...document.querySelectorAll('td')];
+        const domTd = htmlTd.slice();
+        // console.log(domTd, domTd.constructor.name, tdTotal);
+        let count = 0;
+
+
+        const colorChange1 = () => {
+            if (count < boxCount) {
+                $(domTd[count]).css('background-color', `rgba(0, ${Math.floor(count / boxNum) * Math.floor(boxCount / rowNum)}, 0`);
+                count++;
+
+                setTimeout(colorChange1, 40);
+            }
+            else {
+                count = 0;
+                clearTimeout(colorChange1);
+                stop(colorChange1);
+                colorChange2();
+            }
+        };
+
+        const colorChange2 = () => {
+            if (count < boxCount) {
+                $(domTd[count]).css('background-color', `transparent`);
+                count++;
+
+                setTimeout(colorChange2, 40);
+            }
+            else {
+                count = 0;
+                clearTimeout(colorChange2);
+                stop(colorChange2);
+                return;
+            }
+        };
+
+        colorChange1();
+    </script>
+</body>
+
+</html>
