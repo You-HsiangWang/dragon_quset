@@ -720,10 +720,57 @@ function princessthankyou() {
 
 // fadeout
 function fadeout(){
+    $('#bgi').one('transitionend', function(){
+        startSceenFive();
+    });
     $('#bgi').css({
         'transition': '3s',
         'opacity': '0'
     });
+};
+
+// sceenfive 結算
+const resultOne = document.querySelector('#resultOne').innerText;
+const resultTwo = document.querySelector('#resultTwo').innerText;
+//抓到要擺的位置
+const showResultOne = document.querySelector('#showResultOne');
+const showResultTwo = document.querySelector('#showResultTwo');
+// 抓到按鈕 並記得初始化
+const btnResult = document.querySelector('#btnResult');
+
+function startSceenFive () {
+    console.log('恭喜完成遊戲');
+    $('#sceen_five').css('display', 'flex');
+    $('#bgi').css('opacity', '1');
+    let i = 0;
+    let repeatTime = 1;
+    function sOne(inslogan, outslogan) {
+        if (i <= inslogan.length) {
+            outslogan.innerHTML = inslogan.substring(0, i);
+            i++;
+            setTimeout(sOne, 200);
+        }else if (i === inslogan.length && repeatTime === 2) {
+            setTimeout(function(){
+                $(showResultTwo).css('display', 'none');
+                i = 0;
+                startResult();
+            }, 200)
+        }else if (i === inslogan.length && repeatTime === 1) {
+            setTimeout(function(){
+                $(showResultOne).css('display', 'none');
+                i = 0;
+                sOne(resultTwo,showResultTwo);
+                repeatTime++;
+            }, 200)
+        };
+    };
+    setTimeout(function(){
+        sOne(resultOne,showResultOne);
+    }, 200);
+};
+
+function startResult(){
+    console.log('結果計算');
 };
 
 
@@ -732,7 +779,7 @@ function fadeout(){
 
 
 // start game -----------------------------------------------------------------------
-// TODO: 問題可以用左右兩側飛入，結尾恭喜完成挑戰，狀態欄
+// TODO: 問題可以用左右兩側飛入，結尾恭喜完成挑戰，狀態欄,背景公主貓咪跑來跑去。
 window.addEventListener('load', startSceenOne);
 
 //單獨測試第二幕出場
