@@ -730,7 +730,7 @@ function fadeout(){
 };
 
 // sceenfive 結算
-const resultOne = document.querySelector('#resultOne').innerText;
+// const resultOne = document.querySelector('#resultOne').innerText;
 const resultTwo = document.querySelector('#resultTwo').innerText;
 //抓到要擺的位置
 const showResultOne = document.querySelector('#showResultOne');
@@ -742,35 +742,26 @@ function startSceenFive () {
     console.log('恭喜完成遊戲');
     $('#sceen_five').css('display', 'flex');
     $('#bgi').css('opacity', '1');
+    $('#resultLogo').css('display', 'block');
     let i = 0;
-    let repeatTime = 1;
-    function sOne(inslogan, outslogan) {
-        if (i <= inslogan.length) {
-            outslogan.innerHTML = inslogan.substring(0, i);
+    function sOne() {
+        console.log(i,resultTwo.length);
+        if (i <= resultTwo.length) {
+            showResultTwo.innerHTML = resultTwo.substring(0, i);
             i++;
             setTimeout(sOne, 200);
-        }else if (i === inslogan.length && repeatTime === 2) {
-            setTimeout(function(){
-                $(showResultTwo).css('display', 'none');
-                i = 0;
-                startResult();
-            }, 200)
-        }else if (i === inslogan.length && repeatTime === 1) {
-            setTimeout(function(){
-                $(showResultOne).css('display', 'none');
-                i = 0;
-                sOne(resultTwo,showResultTwo);
-                repeatTime++;
-            }, 200)
+        }
+        if(i == resultTwo.length + 1){
+            $('#sceen_five').css('display', 'none');
+            startResult();
         };
     };
-    setTimeout(function(){
-        sOne(resultOne,showResultOne);
-    }, 200);
+    setTimeout(sOne, 200);
 };
 
 function startResult(){
     console.log('結果計算');
+    window.location.assign('./sceensix.html');
 };
 
 

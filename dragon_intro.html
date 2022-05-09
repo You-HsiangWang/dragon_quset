@@ -44,7 +44,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            overflow: auto;
+            overflow: hidden;
         }
 
         #tableShutter {
@@ -554,15 +554,20 @@
 
 <body>
     <div class="bgi fs" id="bgi">
+        <!-- 第五幕 結算結果 -->
+        <div class="sceen_six fs" id="sceen_six" style="display: none;">
+        
+        </div>
         <!-- 第四幕 結算畫面 -->
         <div class="sceen_five fs" id="sceen_five" style="display: none;">
             <!-- slogan放這裡 -->
-            <p class="slogan" id="resultOne" style="display: none;">恭喜你完成遊戲</p>
-            <p class="slogan" id="resultTwo" style="display: none;">遊戲結果計算中</p>
-            <button id="btnResult" class="btnre" style="display: none;">回首頁</button>
+            <!-- <p class="slogan" id="resultOne" style="display: none;">恭喜你完成遊戲</p> -->
+            <p class="slogan" id="resultTwo" style="display: none;">根據你遊戲中的表現...</p>
+            <!-- <button id="btnResult" class="btnre" style="display: none;">回首頁</button> -->
             <!-- 下方show 上方準備 -->
-            <p class="slogan" id="showResultOne"></p>
-            <p class="slogan" id="showResultTwo"></p>
+            <div id="resultLogo" style="display: none; width: 20%;"><img src="./img/cat.gif" alt="" style="width: 100%;"></div>
+            <p class="slogan" id="showResultOne">恭喜你完成遊戲</p>
+            <p class="slogan" id="showResultTwo" style="font-size: 1.5rem"></p>
         </div>
         <!-- 第三幕 打架拉 -->
         <div class="sceen_four fs" id="sceen_four" style="display: none;">
